@@ -80,13 +80,13 @@ func getConfig() *Config {
 
 func getExecFilePath() *string {
 	var execFilePath string
-	tempDir, _ := os.MkdirTemp("", "mysqldump-")
+	root, _ := os.Getwd()
+	tempDir, _ := os.MkdirTemp(root, "mysqldump-")
 	if runtime.GOOS == "windows" {
 		execFilePath = filepath.Join(tempDir, "mysqldump.exe")
 		file, _ := os.Create(execFilePath)
 		defer file.Close()
 		io.Copy(file, bytes.NewReader(mysqldumpWindows))
-
 	} else {
 		execFilePath = filepath.Join(tempDir, "mysqldump")
 		file, _ := os.Create(execFilePath)

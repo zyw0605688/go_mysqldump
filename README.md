@@ -12,7 +12,7 @@
 2. 根据配置文件，生成定时任务
 3. 任务里调用mysqldump，远程备份数据库。基本命令如下
    ./mysqldump -h 172.16.66.99 -P 3306 -u root -proot --databases ZmosPublicDb2 ZmosPublicDb > backup_file.sql
-4. 将备份文件上传到指定s3云存储
+4. 将备份文件上传到指定s3云存储,会存到bucketName/mysql_backup/172.16.66.13_20241009160701.sql 文件名是ip和时间拼出来的
 
 ### 配置文件
 ```
@@ -57,7 +57,9 @@
 1. 主程序在main.go中，很简单的几个方法。可参考上面的代码执行流程
 2. 打包命令
 ```
-go env -w CGO_ENABLED=0  GOOS=linux/windows  GOARCH=amd64
+go env -w GOOS=linux  GOARCH=amd64 CGO_ENABLED=0
 go build -o go_mysqldump_linux main.go
+
+go env -w GOOS=windows  GOARCH=amd64
 go build -o "go_mysqldump_windows.exe" main.go
 ```
