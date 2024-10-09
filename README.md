@@ -1,5 +1,7 @@
 
 ## 一个定时备份mysql的工具，上传s3
+1. 内嵌官方mysqldump命令行工具
+2. 调用命令行工具，定时执行，上传到s3对象存储
 
 ### 使用到的模块
 1. mysqldump
@@ -63,3 +65,4 @@ go build -o go_mysqldump_linux main.go
 go env -w GOOS=windows  GOARCH=amd64
 go build -o "go_mysqldump_windows.exe" main.go
 ```
+3. 如有需要，可以下载mysql包，替换mysqldump工具，以更换版本。目前使用的8.4.2 LTS版
