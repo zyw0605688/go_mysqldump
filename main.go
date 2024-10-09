@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
@@ -36,6 +37,12 @@ type Config struct {
 		Region     string `json:"region"`
 	} `json:"s3"`
 }
+
+//go:embed mysqldump
+var mysqldumpLinux []byte
+
+//go:embed mysqldump.exe
+var mysqldumpWindows []byte
 
 func main() {
 	// 加载读取json配置
@@ -73,16 +80,21 @@ func getConfig() *Config {
 
 func getExecFilePath() *string {
 	var execFilePath string
-	root, err := os.Getwd()
-	if err != nil {
-		fmt.Println("获取当前路径失败", err)
-		return nil
-	}
+	tempDir, _ := os.MkdirTemp("", "mysqldump-")
 	if runtime.GOOS == "windows" {
-		execFilePath = filepath.Join(root, "./assets/mysqldump.exe")
+		execFilePath = filepath.Join(tempDir, "mysqldump.exe")
+		file, _ := os.Create(execFilePath)
+		defer file.Close()
+		io.Copy(file, bytes.NewReader(mysqldumpWindows))
+
 	} else {
-		execFilePath = filepath.Join(root, "./assets/mysqldump")
+		execFilePath = filepath.Join(tempDir, "mysqldump")
+		file, _ := os.Create(execFilePath)
+		defer file.Close()
+		io.Copy(file, bytes.NewReader(mysqldumpLinux))
 	}
+	// 设置可执行权限
+	_ = os.Chmod(execFilePath, 0755)
 	return &execFilePath
 }
 
