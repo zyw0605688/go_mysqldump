@@ -49,8 +49,8 @@
 ### 使用流程
 1. 下载release下可执行程序go_mysqldump，config.json文件，放到同一目录下
 2. 修改config.json配置文件
-3. 运行程序go_mysqldump(会占用终端)，也可以使用nohup go_mysqldump > go_mysqldump.log 2>&1 &
-4. 结束进程，使用ps aux | grep 'go_mysqldump' 查看进程，再使用   kill -9 pid    结束进程
+3. 运行程序go_mysqldump(会占用终端)，也可以使用nohup go_mysqldump_linux > go_mysqldump.log 2>&1 &
+4. 结束进程，使用ps aux | grep 'go_mysqldump_' 查看进程，再使用   kill -9 pid    结束进程
 
 ### 二次开发，打包
 1. assets目录下放的时候执行脚本
@@ -58,6 +58,6 @@
 3. 打包命令
 ```
 go env -w CGO_ENABLED=0  GOOS=linux/windows  GOARCH=amd64
-go build -o go_mysqldump main.go
-go build -o "go_mysqldump.exe" main.go
+go build -o go_mysqldump_linux main.go
+go build -o "go_mysqldump_windows.exe" main.go
 ```
