@@ -5,6 +5,7 @@
 1. mysqldump
 2. cron
 3. go cdk
+4. go embed
 
 ### 代码执行流程
 1. 读取配置文件config.json（同目录下得有这个文件）
@@ -47,15 +48,14 @@
 3. s3: 支持华为云obs, 阿里云oss,腾讯云cos,七牛云, 又拍云，百度云，minio,亚马逊s3等任意支持s3协议的云存储。每个配置域下secretID、secretKey、endpoint、bucketName、region是必须的。大小写，格式需严格符合。
 
 ### 使用流程
-1. 下载release下可执行程序go_mysqldump，config.json文件，放到同一目录下
+1. 下载release下可执行程序go_mysqldump_linux，config.json文件，放到同一目录下
 2. 修改config.json配置文件
-3. 运行程序go_mysqldump(会占用终端)，也可以使用nohup go_mysqldump_linux > go_mysqldump.log 2>&1 &
+3. 运行程序go_mysqldump_linux(会占用终端)，也可以使用nohup go_mysqldump_linux > go_mysqldump.log 2>&1 &
 4. 结束进程，使用ps aux | grep 'go_mysqldump_' 查看进程，再使用   kill -9 pid    结束进程
 
 ### 二次开发，打包
-1. assets目录下放的时候执行脚本
-2. 主程序在main.go中，很简单的几个方法。可参考上面的代码执行流程
-3. 打包命令
+1. 主程序在main.go中，很简单的几个方法。可参考上面的代码执行流程
+2. 打包命令
 ```
 go env -w CGO_ENABLED=0  GOOS=linux/windows  GOARCH=amd64
 go build -o go_mysqldump_linux main.go
