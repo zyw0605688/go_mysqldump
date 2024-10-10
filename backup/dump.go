@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/duke-git/lancet/v2/fileutil"
+	"os"
 	"os/exec"
 	"time"
 )
 
 func Dump(execFilePath *string, config *config.Config) {
 	var backupZipFilePath = time.Now().Format("20060102150405") + ".zip"
-	fileutil.CreateFile(backupZipFilePath)
-	defer fileutil.RemoveFile(backupZipFilePath)
-	for _, item := range config.Db {
+	defer os.Remove(backupZipFilePath)
+	for i, item := range config.Db {
 		cmd := exec.Command(*execFilePath, "-h", item.Host, "-P", item.Port, "-u", item.Username, "-p"+item.Password, "--databases")
 		cmd.Args = append(cmd.Args, item.Databases...)
 		fmt.Println("即将执行命令：", cmd.String())
@@ -37,7 +37,11 @@ func Dump(execFilePath *string, config *config.Config) {
 			continue
 		}
 		fmt.Println("备份成功:", backupFilePath)
-		err = fileutil.ZipAppendEntry(backupFilePath, backupZipFilePath)
+		if i == 0 {
+			err = fileutil.Zip(backupFilePath, backupZipFilePath)
+		} else {
+			err = fileutil.ZipAppendEntry(backupFilePath, backupZipFilePath)
+		}
 		if err != nil {
 			fmt.Println("备份文件写入压缩包失败", err)
 			continue

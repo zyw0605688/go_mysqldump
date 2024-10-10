@@ -8,8 +8,10 @@ import (
 	"github.com/duke-git/lancet/v2/fileutil"
 	"github.com/robfig/cron/v3"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"runtime"
+	"syscall"
 )
 
 //go:embed assets/mysqldump
@@ -28,6 +30,7 @@ func main() {
 	fmt.Println("配置信息：", conf)
 	// 根据系统，获取mysqldump的绝对路径
 	execFilePath, err := getExecFilePath()
+	fmt.Println("mysqldump命令地址：", *execFilePath)
 	if err != nil {
 		fmt.Println("获取mysqldump命令地址报错", err)
 		return
@@ -42,17 +45,31 @@ func main() {
 		return
 	}
 	c.Start()
+
+	// 优雅退出程序，清理临时文件
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		sig := <-sigCh
+		fmt.Printf("接收到信号: %v，开始优雅退出...\n", sig)
+		// 清理临时文件
+		tempDirPath := filepath.Dir(*execFilePath)
+		err := os.RemoveAll(tempDirPath)
+		if err != nil {
+			fmt.Println("删除临时文件出错", err)
+			fmt.Println("请自行删除", tempDirPath)
+		}
+		// 退出程序
+		os.Exit(0)
+	}()
+
 	select {}
 }
 
 func getExecFilePath() (*string, error) {
 	var execFilePath string
 	var execFileBytes []byte
-	root, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-	tempDir, err := os.MkdirTemp(root, "mysqldump-")
+	tempDir, err := os.MkdirTemp("", "mysqldump-")
 	if err != nil {
 		fmt.Println("创建临时目录失败", err)
 		return nil, err
