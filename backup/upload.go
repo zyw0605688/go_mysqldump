@@ -17,7 +17,7 @@ import (
 func uploadFileToS3(fileUrl string, config *config.Config) error {
 	// 创建 AWS SDK 配置
 	s3Config := aws.NewConfig().
-		WithCredentials(credentials.NewStaticCredentials(config.S3.SecretID, config.S3.SecretKey, "")).
+		WithCredentials(credentials.NewStaticCredentials(config.S3.SecretId, config.S3.SecretKey, "")).
 		WithEndpoint(config.S3.Endpoint).
 		WithRegion(config.S3.Region)
 

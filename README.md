@@ -22,11 +22,11 @@
   "cron": "30 * * * *",
   "db": [
     {
-      "Host": "172.16.66.xx",
-      "Port": "3306",
-      "Username": "root",
-      "Password": "root",
-      "Databases": ["ZmosPublicDb", "ZmosPublicDb2"]
+      "host": "172.16.66.xx",
+      "port": "3306",
+      "username": "root",
+      "password": "root",
+      "databases": ["ZmosPublicDb", "ZmosPublicDb2"]
     },
     {
       "host": "172.16.66.xx",
@@ -62,7 +62,7 @@
 go env -w GOOS=linux  GOARCH=amd64 CGO_ENABLED=0
 go build -o go_mysqldump_linux main.go
 
-go env -w GOOS=windows  GOARCH=amd64
+go env -w GOOS=windows  GOARCH=amd64 CGO_ENABLED=0
 go build -o "go_mysqldump_windows.exe" main.go
 ```
 3. 如有需要，可以下载mysql包，替换mysqldump工具，以更换版本。目前使用的8.4.2 LTS版

@@ -17,7 +17,7 @@ type Config struct {
 		Databases []string `json:"databases"`
 	} `json:"db"`
 	S3 struct {
-		SecretID   string `json:"secretID"`
+		SecretId   string `json:"secretId"`
 		SecretKey  string `json:"secretKey"`
 		Endpoint   string `json:"endpoint"`
 		BucketName string `json:"bucketName"`
