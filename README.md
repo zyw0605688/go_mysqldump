@@ -19,28 +19,28 @@
 ### 配置文件
 ```
 {
-  "cron": "30 * * * *",
+  "cron": "0 12,13 * * *",
   "db": [
     {
-      "host": "172.16.66.xx",
+      "host": "172.xx.xx.xx",
       "port": "3306",
       "username": "root",
       "password": "root",
-      "databases": ["ZmosPublicDb", "ZmosPublicDb2"]
+      "databases": ["ZMOS_ZC21", "ZMOS_ZC212"]
     },
     {
-      "host": "172.16.66.xx",
-      "port": "33060",
+      "host": "124.xx.xx.xx",
+      "port": "4408",
       "username": "root",
       "password": "root",
-      "databases": ["testaaa"]
+      "databases": ["ZMOS_ZE0704","ZMOS_ZE0705"]
     }
   ],
   "s3": {
     "secretId": "xxx",
     "secretKey": "xxx",
     "endpoint": "obs.cn-east-3.myhuaweicloud.com",
-    "bucketName": "v3-dev",
+    "bucketName": "xxx",
     "region": "cn-east-3"
   }
 }
