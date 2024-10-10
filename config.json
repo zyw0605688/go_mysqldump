@@ -2,11 +2,11 @@
   "cron": "30 * * * *",
   "db": [
     {
-      "Host": "172.16.66.xx",
-      "Port": "3306",
-      "Username": "root",
-      "Password": "root",
-      "Databases": ["ZmosPublicDb", "ZmosPublicDb2"]
+      "host": "172.16.66.xx",
+      "port": "3306",
+      "username": "root",
+      "password": "root",
+      "databases": ["ZmosPublicDb", "ZmosPublicDb2"]
     },
     {
       "host": "172.16.66.xx",
