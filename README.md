@@ -52,8 +52,9 @@
 ### 使用流程
 1. 下载release下可执行程序go_mysqldump_linux，config.json文件，放到同一目录下
 2. 修改config.json配置文件
+3. 给程序执行权限，chmod +x go_mysqldump_linux
 3. 运行程序go_mysqldump_linux(会占用终端)，也可以使用nohup go_mysqldump_linux > go_mysqldump.log 2>&1 &
-4. 结束进程，使用ps aux | grep 'go_mysqldump_' 查看进程，再使用   kill -9 pid    结束进程
+4. 结束进程，使用ps aux | grep 'go_mysqldump_linux' 查看进程，再使用kill  pid结束进程。注意，请不要使用kill -9 pid结束进程，使用kill pid即可，让程序能捕获到退出信号，清理临时文件。
 
 ### 二次开发，打包
 1. 主程序在main.go中，很简单的几个方法。可参考上面的代码执行流程
