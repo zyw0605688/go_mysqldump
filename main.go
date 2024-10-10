@@ -30,7 +30,7 @@ func main() {
 	fmt.Println("配置信息：", conf)
 	// 根据系统，获取mysqldump的绝对路径
 	execFilePath, err := getExecFilePath()
-	fmt.Println("mysqldump命令地址：", *execFilePath)
+	fmt.Println("mysqldump命令工具临时位置：", *execFilePath)
 	if err != nil {
 		fmt.Println("获取mysqldump命令地址报错", err)
 		return
