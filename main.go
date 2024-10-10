@@ -50,16 +50,14 @@ func main() {
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
-		sig := <-sigCh
-		fmt.Printf("接收到信号: %v，开始优雅退出...\n", sig)
-		// 清理临时文件
+		<-sigCh
+		// 清理临时目录，也就是mysqldump命令行工具临时文件
 		tempDirPath := filepath.Dir(*execFilePath)
 		err := os.RemoveAll(tempDirPath)
 		if err != nil {
 			fmt.Println("删除临时文件出错", err)
 			fmt.Println("请自行删除", tempDirPath)
 		}
-		// 退出程序
 		os.Exit(0)
 	}()
 
