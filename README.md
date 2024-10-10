@@ -13,8 +13,8 @@
 1. 读取配置文件config.json（同目录下得有这个文件）
 2. 根据配置文件，生成定时任务
 3. 任务里调用mysqldump，远程备份数据库。基本命令如下
-   ./mysqldump -h 172.16.66.99 -P 3306 -u root -proot --databases ZmosPublicDb2 ZmosPublicDb > backup_file.sql
-4. 将备份文件上传到指定s3云存储,会存到bucketName/mysql_backup/172.16.66.13_20241009160701.sql 文件名是ip和时间拼出来的
+   ./mysqldump -h 172.16.66.99 -P 3306 -u root -proot --databases ZmosPublicDb2 ZmosPublicDb > 20241009160701.sql
+4. 将备份文件压缩上传到指定s3云存储,会存到bucketName/mysql_backup/20241009160701.zip 文件名是时间
 
 ### 配置文件
 ```
@@ -47,7 +47,7 @@
 ```
 1. cron: 定时任务的cron表达式，五个字段。在线生成[https://cron.ciding.cc/](https://cron.ciding.cc/)
 2. db: 数据库配置，支持多个数据库。每个配置域下，host、port、username、password、databases是必须的。大小写，格式需严格符合。
-3. s3: 支持华为云obs, 阿里云oss,腾讯云cos,七牛云, 又拍云，百度云，minio,亚马逊s3等任意支持s3协议的云存储。每个配置域下secretID、secretKey、endpoint、bucketName、region是必须的。大小写，格式需严格符合。
+3. s3: 支持华为云obs, 阿里云oss,腾讯云cos,七牛云, 又拍云，百度云，minio,亚马逊s3等任意支持s3协议的云存储。每个配置域下secretID、secretKey、endpoint、bucketName、region是必须的。暂不支持上传多个s3，大小写，格式需严格符合。去掉s3整个配置则不上传s3。
 
 ### 使用流程
 1. 下载release下可执行程序go_mysqldump_linux，config.json文件，放到同一目录下
