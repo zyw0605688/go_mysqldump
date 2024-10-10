@@ -37,7 +37,7 @@
     }
   ],
   "s3": {
-    "secretID": "xxx",
+    "secretId": "xxx",
     "secretKey": "xxx",
     "endpoint": "obs.cn-east-3.myhuaweicloud.com",
     "bucketName": "v3-dev",
