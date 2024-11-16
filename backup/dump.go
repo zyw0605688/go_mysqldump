@@ -47,8 +47,9 @@ func Dump(execFilePath *string, config *config.Config) {
 			continue
 		}
 	}
-	if config.S3.SecretId != "" {
-		err := uploadFileToS3(backupZipFilePath, config)
+	// 上传文件到s3
+	for _, item := range config.S3 {
+		err := uploadFileToS3(backupZipFilePath, item)
 		if err != nil {
 			fmt.Println("上传文件到s3失败", err)
 			return

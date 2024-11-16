@@ -1,26 +1,48 @@
 {
-  "cron": "0 12,13 * * *",
+  "cron": "0 04 * * *",
   "db": [
     {
-      "host": "172.xx.xx.xx",
-      "port": "3306",
-      "username": "root",
-      "password": "root",
-      "databases": ["ZMOS_ZC21", "ZMOS_ZC212"]
+      "Host": "172.16.*.*",
+      "Port": "3306",
+      "Username": "root",
+      "Password": "****",
+      "Databases": [
+        "ZMOS_ZC21",
+        "ZMOS_ZC212",
+        "ZMOS_ZE0704",
+        "ZMOS_ZE0705",
+        "ZMOS_ZP01",
+        "ZmosMessageServiceDb",
+        "ZmosPublicDb",
+        "ZmosPublicDb2",
+        "ZmosZe0401Db",
+        "ZmosZe05Db",
+        "hd-plugin",
+        "maintenanceassistant"
+      ]
     },
     {
-      "host": "124.xx.xx.xx",
+      "host": "124.70.*.*",
       "port": "4408",
-      "username": "root",
-      "password": "root",
-      "databases": ["ZMOS_ZE0704","ZMOS_ZE0705"]
+      "username": "*",
+      "password": "*",
+      "databases": [
+        "ZMOS_ZE0704",
+        "ZMOS_ZE0705",
+        "ZMOS_ZP01",
+        "zmjdev",
+        "zmjos",
+        "zmjs"
+      ]
     }
   ],
-  "s3": {
-    "secretId": "xxx",
-    "secretKey": "xxx",
-    "endpoint": "obs.cn-east-3.myhuaweicloud.com",
-    "bucketName": "xxx",
-    "region": "cn-east-3"
-  }
+  "s3": [
+    {
+      "secretID": "*",
+      "secretKey": "*",
+      "endpoint": "obs.cn-east-3.myhuaweicloud.com",
+      "bucketName": "zmos-v3-dev",
+      "region": "cn-east-3"
+    }
+  ]
 }

@@ -3,7 +3,6 @@ package backup
 import (
 	"context"
 	"fmt"
-	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -14,12 +13,12 @@ import (
 )
 
 // 上传文件到S3
-func uploadFileToS3(fileUrl string, config *config.Config) error {
+func uploadFileToS3(fileUrl string, s3Item types.S3Item) error {
 	// 创建 AWS SDK 配置
 	s3Config := aws.NewConfig().
-		WithCredentials(credentials.NewStaticCredentials(config.S3.SecretId, config.S3.SecretKey, "")).
-		WithEndpoint(config.S3.Endpoint).
-		WithRegion(config.S3.Region)
+		WithCredentials(credentials.NewStaticCredentials(s3Item.SecretId, s3Item.SecretKey, "")).
+		WithEndpoint(s3Item.Endpoint).
+		WithRegion(s3Item.Region)
 
 	// 创建 AWS 会话
 	sessions, err := session.NewSession(s3Config)
@@ -29,7 +28,7 @@ func uploadFileToS3(fileUrl string, config *config.Config) error {
 	}
 
 	// 打开Bucket
-	bucket, err := s3blob.OpenBucket(context.Background(), sessions, config.S3.BucketName, nil)
+	bucket, err := s3blob.OpenBucket(context.Background(), sessions, s3Item.BucketName, nil)
 	if err != nil {
 		fmt.Println("打开Bucket失败", err)
 		return err

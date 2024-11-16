@@ -7,22 +7,26 @@ import (
 	"path/filepath"
 )
 
+type S3Item struct {
+	SecretId   string `json:"secretId"`
+	SecretKey  string `json:"secretKey"`
+	Endpoint   string `json:"endpoint"`
+	BucketName string `json:"bucketName"`
+	Region     string `json:"region"`
+}
+
+type DbItem struct {
+	Host      string   `json:"host"`
+	Port      string   `json:"port"`
+	Username  string   `json:"username"`
+	Password  string   `json:"password"`
+	Databases []string `json:"databases"`
+}
+
 type Config struct {
-	Cron string `json:"cron"`
-	Db   []struct {
-		Host      string   `json:"host"`
-		Port      string   `json:"port"`
-		Username  string   `json:"username"`
-		Password  string   `json:"password"`
-		Databases []string `json:"databases"`
-	} `json:"db"`
-	S3 struct {
-		SecretId   string `json:"secretId"`
-		SecretKey  string `json:"secretKey"`
-		Endpoint   string `json:"endpoint"`
-		BucketName string `json:"bucketName"`
-		Region     string `json:"region"`
-	} `json:"s3"`
+	Cron string   `json:"cron"`
+	Db   []DbItem `json:"db"`
+	S3   []S3Item `json:"s3"`
 }
 
 func GetConfig() (conf *Config, err error) {
