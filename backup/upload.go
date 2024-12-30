@@ -3,6 +3,7 @@ package backup
 import (
 	"context"
 	"fmt"
+	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -13,7 +14,7 @@ import (
 )
 
 // 上传文件到S3
-func uploadFileToS3(fileUrl string, s3Item types.S3Item) error {
+func uploadFileToS3(fileUrl string, s3Item config.S3Item) error {
 	// 创建 AWS SDK 配置
 	s3Config := aws.NewConfig().
 		WithCredentials(credentials.NewStaticCredentials(s3Item.SecretId, s3Item.SecretKey, "")).

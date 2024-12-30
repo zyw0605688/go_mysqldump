@@ -6,6 +6,8 @@ import (
 	"gitee.com/zyw0605688_admin/go_mysqldump/backup"
 	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/duke-git/lancet/v2/fileutil"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"
 	"os"
 	"os/signal"
@@ -61,7 +63,18 @@ func main() {
 		os.Exit(0)
 	}()
 
-	select {}
+	r := gin.Default()
+	r.MaxMultipartMemory = 10240000 << 20
+	// 允许跨域
+	r.Use(cors.Default())
+	// 静态资源
+	r.Static("/", "./assets/WebUI")
+	err = r.Run(":3028")
+	if err != nil {
+		fmt.Println("服务启动失败：", err)
+		return
+	}
+	fmt.Println("服务启动成功,测试地址http://0.0.0.0:3028")
 }
 
 func getExecFilePath() (*string, error) {
