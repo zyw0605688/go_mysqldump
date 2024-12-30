@@ -1,0 +1,50 @@
+{
+  "name": "www",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode development",
+    "start": "vite --mode production",
+    "preview": "vite preview",
+    "build": "vite build --mode production",
+    "type-check": "vue-tsc --build --force"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "axios": "^1.7.4",
+    "element-plus": "^2.7.3",
+    "lodash": "^4.17.21",
+    "mitt": "^3.0.1",
+    "pinia": "^2.1.7",
+    "uuid": "^10.0.0",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.10.3",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/lodash": "^4.17.7",
+    "@types/node": "^20.14.9",
+    "@types/uuid": "^10.0.0",
+    "@types/vue": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "^8.49.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "increase-memory-limit-fixbug": "^1.0.0",
+    "npm-run-all2": "^6.1.2",
+    "prettier": "^3.0.3",
+    "sass": "^1.80.6",
+    "typescript": "~5.4.0",
+    "unplugin-auto-import": "^0.17.6",
+    "unplugin-vue-components": "^0.27.0",
+    "vite": "^5.2.8",
+    "vue-tsc": "^2.0.11"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,vue,js,jsx}": "eslint --cache --fix"
+  }
+}
