@@ -31,5 +31,3 @@ public/configUI
 *.sw?
 
 *.tsbuildinfo
-components.d.ts
-auto-imports.d.ts
