@@ -86,7 +86,7 @@
             clearable
           ></el-input>
         </el-form-item>
-        <el-form-item label="是否本地存储" prop="cron">
+        <el-form-item label="本地存储" prop="cron">
           <el-switch v-model="data.formData.is_local_store"></el-switch>
         </el-form-item>
         <el-form-item label="选择S3" prop="dbList">
@@ -124,7 +124,9 @@ const data = reactive({
   s3List: [],
   tableData: [] as any,
   formDialogVisible: false,
-  formData: {},
+  formData: {
+    is_local_store: true
+  },
   type: ""
 });
 const getTableData = async () => {

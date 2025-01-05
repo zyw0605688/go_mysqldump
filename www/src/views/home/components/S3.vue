@@ -105,15 +105,12 @@ const showAddDialog = () => {
 const getDetailAndShowUpdateFormDialog = async (row) => {
   data.type = "编辑";
   data.formData = row;
+  data.formDialogVisible = true;
 };
 const onSubmit = async () => {
-  if (data.type != "info") {
-    const params = JSON.parse(JSON.stringify(data.formData));
-    console.log(params);
-    await http.post("/s3/update", params);
-    await getTableData();
-  }
-  closeFormDialog();
+  const params = JSON.parse(JSON.stringify(data.formData));
+  await http.post("/s3/update", params);
+  window.location.reload()
 };
 
 // 关闭弹窗
