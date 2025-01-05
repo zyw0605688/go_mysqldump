@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div style="display: flex; justify-content: flex-end">
-      <el-button @click="showAddDialog">新增数据库</el-button>
-    </div>
+    <el-button @click="showAddDialog">新增数据库</el-button>
     <el-table
       ref="multipleTable"
       style="width: 100%; height: 760px; margin-top: 16px"
@@ -88,17 +86,20 @@
             clearable
           ></el-input>
         </el-form-item>
-        <el-form-item label="存储位置" prop="dbList">
+        <el-form-item label="是否本地存储" prop="cron">
+          <el-switch v-model="data.formData.is_local_store"></el-switch>
+        </el-form-item>
+        <el-form-item label="选择S3" prop="dbList">
           <el-select
             v-model="data.formData.s3s"
             multiple
             clearable
-            placeholder="请选择要备份的数据库(多选)"
+            placeholder="请选择要上传的s3存储"
           >
             <el-option
               v-for="(item, index) in data.s3List"
               :key="index"
-              :label="item.secretID"
+              :label="item.name"
               :value="item.ID"
             ></el-option>
           </el-select>
@@ -152,6 +153,7 @@ const showAddDialog = () => {
 const getDetailAndShowUpdateFormDialog = async (row) => {
   data.type = "编辑";
   data.formData = row;
+  data.formDialogVisible = true;
 };
 const onSubmit = async () => {
   if (data.type != "info") {

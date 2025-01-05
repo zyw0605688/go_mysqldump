@@ -2,6 +2,21 @@
   <div class="header">
     <div class="left">
       MySql 数据备份
+      <el-popover placement="top-start" :width="480" trigger="hover">
+        <template #reference>
+          <el-icon style="margin-left: 4px">
+            <InfoFilled />
+          </el-icon>
+        </template>
+        <template #default>
+          <ul>
+            <li>一个定时备份mysql数据库的小工具。</li>
+            <li>支持备份到本机，也可以上传s3云存储，或两者共同使用。</li>
+            <li>如果开启保存到本地，将映射/mysql_backup到宿主机。</li>
+            <li>如需上传s3,请先添加s3配置。</li>
+          </ul>
+        </template>
+      </el-popover>
     </div>
     <div class="right">
       <el-dropdown>
@@ -19,6 +34,11 @@
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+
+const content = `
+
+
+`;
 
 const logOut = () => {
   router.push("/login");

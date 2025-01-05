@@ -1,31 +1,6 @@
 <template>
   <div>
-    <div class="title">
-      <div class="host">
-        <div>本地备份位置</div>
-        <el-popover
-          placement="top-start"
-          :width="200"
-          trigger="hover"
-          content="将映射到宿主机，请填写宿主机位置"
-        >
-          <template #reference>
-            <el-icon style="top: 3px">
-              <InfoFilled />
-            </el-icon>
-          </template>
-        </el-popover>
-
-        <el-input
-          v-model="data.formData.hostPath"
-          placeholder="如：/data/mysql_backup"
-          clearable
-          style="width: 260px; margin-left: 8px"
-        ></el-input>
-        <el-button type="primary" @click="showAddDialog" style="margin-left: 8px">确定</el-button>
-      </div>
-      <el-button @click="showAddDialog" style="margin-left: 8px">新增S3存储</el-button>
-    </div>
+    <el-button @click="showAddDialog">新增S3存储</el-button>
     <el-table
       ref="multipleTable"
       style="width: 100%; height: 760px; margin-top: 16px"
@@ -72,6 +47,9 @@
         label-width="80px"
         style="margin-top: 16px"
       >
+        <el-form-item label="名称" prop="accessKey">
+          <el-input v-model="data.formData.name" placeholder="仅用于区分" clearable></el-input>
+        </el-form-item>
         <el-form-item label="密钥" prop="accessKey">
           <el-input v-model="data.formData.accessKey" placeholder="访问密钥Access Key,secretId" clearable></el-input>
         </el-form-item>
@@ -148,14 +126,4 @@ const closeFormDialog = () => {
 </script>
 
 <style scoped lang="scss">
-.title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-
-  .host {
-    display: flex;
-    align-items: baseline;
-  }
-}
 </style>

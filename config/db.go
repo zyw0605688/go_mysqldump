@@ -11,23 +11,20 @@ import (
 
 type DBConfig struct {
 	gorm.Model
-	Host     string         `gorm:"column:host" json:"host"`
-	Port     string         `gorm:"column:port" json:"port"`
-	Username string         `gorm:"column:username" json:"username"`
-	Password string         `gorm:"column:password" json:"password"`
-	Cron     string         `gorm:"column:cron" json:"cron"`
-	Dbs      datatypes.JSON `gorm:"column:dbs;type:json" json:"dbs"`
-	S3s      datatypes.JSON `gorm:"column:s3s;type:json" json:"s3s"`
-}
-
-type HostPathConfig struct {
-	gorm.Model
-	HostPath string `gorm:"column:hostPath" json:"hostPath"`
+	Host         string         `gorm:"column:host" json:"host"`
+	Port         string         `gorm:"column:port" json:"port"`
+	Username     string         `gorm:"column:username" json:"username"`
+	Password     string         `gorm:"column:password" json:"password"`
+	Cron         string         `gorm:"column:cron" json:"cron"`
+	Dbs          datatypes.JSON `gorm:"column:dbs;type:json" json:"dbs"`
+	IsLocalStore bool           `gorm:"column:is_local_store;type:is_local_store" json:"is_local_store"`
+	S3s          datatypes.JSON `gorm:"column:s3s;type:json" json:"s3s"`
 }
 
 type S3Config struct {
 	gorm.Model
-	SecretID   string `gorm:"column:secretID" json:"secretID"`
+	Name       string `gorm:"column:name" json:"name"`
+	AccessKey  string `gorm:"column:accessKey" json:"accessKey"`
 	SecretKey  string `gorm:"column:secretKey" json:"secretKey"`
 	Endpoint   string `gorm:"column:endpoint" json:"endpoint"`
 	BucketName string `gorm:"column:bucketName" json:"bucketName"`
@@ -48,7 +45,6 @@ func InitDb() {
 
 	err = db.AutoMigrate(
 		&DBConfig{},
-		&HostPathConfig{},
 		&S3Config{},
 	)
 	if err != nil {
