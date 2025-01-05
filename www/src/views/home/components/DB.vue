@@ -8,7 +8,7 @@
       :data="data.tableData"
     >
       <el-table-column type="index" label="No." width="55" align="center" />
-      <el-table-column prop="host" label="主机" ></el-table-column>
+      <el-table-column prop="host" label="主机"></el-table-column>
       <el-table-column prop="port" label="端口"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column prop="dbList" label="数据库" :show-overflow-tooltip="true"></el-table-column>
@@ -40,23 +40,37 @@
         label-width="80px"
         style="margin-top: 16px"
       >
-        <el-form-item label="主机ip" prop="host">
-          <el-input v-model="data.formData.host" clearable></el-input>
+        <el-form-item label="主机" prop="host">
+          <el-input v-model="data.formData.host" placeholder="主机ip地址" clearable></el-input>
         </el-form-item>
         <el-form-item label="端口号" prop="port">
-          <el-input v-model="data.formData.port" clearable></el-input>
+          <el-input v-model="data.formData.port" placeholder="端口号" clearable></el-input>
         </el-form-item>
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="data.formData.username" clearable></el-input>
+          <el-input
+            v-model="data.formData.username"
+            placeholder="数据库用户名"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <div style="display: flex; width: 100%">
-            <el-input v-model="data.formData.password" clearable style="flex: 1"></el-input>
+            <el-input
+              v-model="data.formData.password"
+              placeholder="数据库密码"
+              clearable
+              style="flex: 1"
+            ></el-input>
             <el-button>测试连接</el-button>
           </div>
         </el-form-item>
         <el-form-item label="数据库" prop="dbList">
-          <el-select v-model="data.formData.dbList" multiple clearable>
+          <el-select
+            v-model="data.formData.dbList"
+            multiple
+            clearable
+            placeholder="请选择要备份的数据库(多选)"
+          >
             <el-option
               v-for="(item, index) in data.dbList"
               :key="index"
