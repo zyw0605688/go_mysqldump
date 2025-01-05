@@ -7,4 +7,8 @@ const instance = axios.create({
   headers: {'Content-Type': 'application/json;charset=UTF-8'}
 });
 
+instance.interceptors.response.use((res)=>{
+  return res.data
+})
+
 export default instance

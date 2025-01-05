@@ -29,20 +29,6 @@ type Config struct {
 	S3   []S3Item `json:"s3"`
 }
 
-type DBConfig struct {
-	Host       string `gorm:"column:host" json:"host"`
-	Port       string `gorm:"column:port" json:"port"`
-	Username   string `gorm:"column:username" json:"username"`
-	Password   string `gorm:"column:password" json:"password"`
-	Cron       string `gorm:"column:cron" json:"cron"`
-	HostPath   string `gorm:"column:hostPath" json:"hostPath"`
-	SecretID   string `gorm:"column:secretID" json:"secretID"`
-	SecretKey  string `gorm:"column:secretKey" json:"secretKey"`
-	Endpoint   string `gorm:"column:endpoint" json:"endpoint"`
-	BucketName string `gorm:"column:bucketName" json:"bucketName"`
-	Region     string `gorm:"column:region" json:"region"`
-}
-
 func GetConfig() (conf *Config, err error) {
 	root, err := os.Getwd()
 	if err != nil {

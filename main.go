@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gitee.com/zyw0605688_admin/go_mysqldump/backup"
 	"gitee.com/zyw0605688_admin/go_mysqldump/config"
+	"gitee.com/zyw0605688_admin/go_mysqldump/routes"
 	"github.com/duke-git/lancet/v2/fileutil"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -12,17 +13,15 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"runtime"
 	"syscall"
 )
 
 //go:embed assets/mysqldump
 var mysqldumpLinux []byte
 
-//go:embed assets/mysqldump.exe
-var mysqldumpWindows []byte
-
 func main() {
+	// 加载数据库
+	config.InitDb()
 	// 加载json配置
 	conf, err := config.GetConfig()
 	if err != nil {
@@ -30,7 +29,7 @@ func main() {
 		return
 	}
 	fmt.Println("配置信息：", conf)
-	// 根据系统，获取mysqldump的绝对路径
+	// 获取mysqldump的绝对路径
 	execFilePath, err := getExecFilePath()
 	fmt.Println("mysqldump命令工具临时位置：", *execFilePath)
 	if err != nil {
@@ -68,7 +67,8 @@ func main() {
 	// 允许跨域
 	r.Use(cors.Default())
 	// 静态资源
-	r.Static("/", "./assets/WebUI")
+	r.Static("/www", "./assets/WebUI")
+	routes.InitRouters(r)
 	err = r.Run(":3028")
 	if err != nil {
 		fmt.Println("服务启动失败：", err)
@@ -85,13 +85,8 @@ func getExecFilePath() (*string, error) {
 		fmt.Println("创建临时目录失败", err)
 		return nil, err
 	}
-	if runtime.GOOS == "windows" {
-		execFilePath = filepath.Join(tempDir, "mysqldump.exe")
-		execFileBytes = mysqldumpWindows
-	} else {
-		execFilePath = filepath.Join(tempDir, "mysqldump")
-		execFileBytes = mysqldumpLinux
-	}
+	execFilePath = filepath.Join(tempDir, "mysqldump")
+	execFileBytes = mysqldumpLinux
 	err = fileutil.WriteBytesToFile(execFilePath, execFileBytes)
 	if err != nil {
 		fmt.Println("创建mysqldump文件失败", err)

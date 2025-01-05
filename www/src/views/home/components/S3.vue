@@ -110,12 +110,12 @@ const data = reactive({
   type: ""
 });
 const getTableData = async () => {
-  const res = await http.get("/db");
-  data.tableData = res.data.list;
+  const res = await http.get("/s3/list");
+  data.tableData = res.data;
 };
 getTableData();
 const deleteAccount = async (item: any) => {
-  await http.delete(`/db?id=${item.id}`);
+  await http.delete(`/s3/delete?ID=${item.ID}`);
   await getTableData();
 };
 
@@ -132,7 +132,7 @@ const onSubmit = async () => {
   if (data.type != "info") {
     const params = JSON.parse(JSON.stringify(data.formData));
     console.log(params);
-    await http.post("/db", params);
+    await http.post("/s3/update", params);
     await getTableData();
   }
   closeFormDialog();

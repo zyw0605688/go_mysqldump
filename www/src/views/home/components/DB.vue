@@ -1,6 +1,8 @@
 <template>
   <div>
-    <el-button @click="showAddDialog">新增数据库</el-button>
+    <div style="display: flex; justify-content: flex-end">
+      <el-button @click="showAddDialog">新增数据库</el-button>
+    </div>
     <el-table
       ref="multipleTable"
       style="width: 100%; height: 760px; margin-top: 16px"
@@ -66,7 +68,7 @@
         </el-form-item>
         <el-form-item label="数据库" prop="dbList">
           <el-select
-            v-model="data.formData.dbList"
+            v-model="data.formData.dbs"
             multiple
             clearable
             placeholder="请选择要备份的数据库(多选)"
@@ -86,6 +88,21 @@
             clearable
           ></el-input>
         </el-form-item>
+        <el-form-item label="存储位置" prop="dbList">
+          <el-select
+            v-model="data.formData.s3s"
+            multiple
+            clearable
+            placeholder="请选择要备份的数据库(多选)"
+          >
+            <el-option
+              v-for="(item, index) in data.s3List"
+              :key="index"
+              :label="item.secretID"
+              :value="item.ID"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -99,21 +116,31 @@
 <script setup lang="ts">
 import { reactive } from "_vue@3.5.13@vue";
 import http from "@/service/http";
+import { onMounted } from "vue";
 
 const data = reactive({
   dbList: [],
+  s3List: [],
   tableData: [] as any,
   formDialogVisible: false,
   formData: {},
   type: ""
 });
 const getTableData = async () => {
-  const res = await http.get("/db");
-  data.tableData = res.data.list;
+  const res = await http.get("/db/list");
+  data.tableData = res.data;
 };
-getTableData();
+const getS3Data = async () => {
+  const res = await http.get("/s3/list");
+  data.s3List = res.data;
+};
+onMounted(async () => {
+  await getS3Data();
+  await getTableData();
+});
+
 const deleteAccount = async (item: any) => {
-  await http.delete(`/db?id=${item.id}`);
+  await http.delete(`/db/delete?ID=${item.ID}`);
   await getTableData();
 };
 
@@ -130,7 +157,7 @@ const onSubmit = async () => {
   if (data.type != "info") {
     const params = JSON.parse(JSON.stringify(data.formData));
     console.log(params);
-    await http.post("/db", params);
+    await http.post("/db/update", params);
     await getTableData();
   }
   closeFormDialog();
