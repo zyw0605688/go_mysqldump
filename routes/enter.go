@@ -18,4 +18,8 @@ func InitRouters(router *gin.Engine) {
 		s3.GET("/list", api.S3List)
 		s3.DELETE("/delete", api.S3Delete)
 	}
+	other := router.Group("/other")
+	{
+		other.POST("/getDbsByDsn", api.GetDbsByDsn)
+	}
 }

@@ -8,12 +8,21 @@
       :data="data.tableData"
     >
       <el-table-column type="index" label="No." width="55" align="center" />
-      <el-table-column prop="host" label="主机"></el-table-column>
-      <el-table-column prop="port" label="端口"></el-table-column>
-      <el-table-column prop="username" label="用户名"></el-table-column>
-      <el-table-column prop="dbList" label="数据库" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="cron" label="定时任务" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column align="left" label="操作" width="220">
+      <el-table-column prop="host" label="主机" width="130" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="port" label="端口" width="90" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="username" label="用户名" width="90" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="is_local_store" label="本地存储" width="90" :show-overflow-tooltip="true">
+        <template #default="scope">
+          {{ scope.row.is_local_store ? "是" : "否"}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="dbs" label="数据库" :show-overflow-tooltip="true">
+        <template #default="scope">
+          <el-tag v-for="(item,index) in scope.row.dbs" :key="index" style="margin: 2px">{{item}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="cron" label="定时任务" :show-overflow-tooltip="true" width="120"></el-table-column>
+      <el-table-column align="left" label="操作" width="140">
         <template #default="scope">
           <el-button
             type="primary"
@@ -61,10 +70,10 @@
               clearable
               style="flex: 1"
             ></el-input>
-            <el-button>测试连接</el-button>
+            <el-button @click="getDbsByDsn">测试连接</el-button>
           </div>
         </el-form-item>
-        <el-form-item label="数据库" prop="dbList">
+        <el-form-item label="数据库" prop="dbs">
           <el-select
             v-model="data.formData.dbs"
             multiple
@@ -74,8 +83,8 @@
             <el-option
               v-for="(item, index) in data.dbList"
               :key="index"
-              :label="item.label"
-              :value="item.value"
+              :label="item"
+              :value="item"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -142,28 +151,35 @@ onMounted(async () => {
   await getTableData();
 });
 
+const getDbsByDsn = async()=>{
+  const { host, port, username, password } = data.formData;
+  const dsn = `${username}:${password}@tcp(${host}:${port})/`;
+  const res = await http.post("/other/getDbsByDsn",{dsn});
+  data.dbList = res.data
+}
+
 const deleteAccount = async (item: any) => {
   await http.delete(`/db/delete?ID=${item.ID}`);
   await getTableData();
 };
 
-const showAddDialog = () => {
+const showAddDialog = async () => {
   data.formDialogVisible = true;
   data.type = "添加";
+  await getS3Data()
 };
 // 打开更新弹窗
 const getDetailAndShowUpdateFormDialog = async (row) => {
   data.type = "编辑";
   data.formData = row;
   data.formDialogVisible = true;
+  await getDbsByDsn()
+  await getS3Data()
 };
 const onSubmit = async () => {
-  if (data.type != "info") {
-    const params = JSON.parse(JSON.stringify(data.formData));
-    console.log(params);
-    await http.post("/db/update", params);
-    await getTableData();
-  }
+  const params = JSON.parse(JSON.stringify(data.formData));
+  await http.post("/db/update", params);
+  await getTableData();
   closeFormDialog();
 };
 

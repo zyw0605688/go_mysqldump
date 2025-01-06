@@ -8,19 +8,26 @@
       :data="data.tableData"
     >
       <el-table-column
+        prop="name"
+        label="名称"
+        :show-overflow-tooltip="true"
+        width="100"
+      ></el-table-column>
+      <el-table-column
         prop="endpoint"
         label="访问域名"
         :show-overflow-tooltip="true"
+        width="150"
       ></el-table-column>
       <el-table-column
         prop="bucketName"
         label="存储桶"
         :show-overflow-tooltip="true"
+        width="120"
       ></el-table-column>
-      <el-table-column prop="region" label="区域" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="region" label="区域" :show-overflow-tooltip="true" width="100"></el-table-column>
       <el-table-column prop="accessKey" label="密钥" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="secretKey" label="密匙" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column align="left" label="操作">
+      <el-table-column align="left" label="操作" width="150">
         <template #default="scope">
           <el-button
             type="primary"
@@ -97,7 +104,7 @@ const deleteAccount = async (item: any) => {
   await getTableData();
 };
 
-const showAddDialog = () => {
+const showAddDialog = async() => {
   data.formDialogVisible = true;
   data.type = "添加";
 };
@@ -110,11 +117,11 @@ const getDetailAndShowUpdateFormDialog = async (row) => {
 const onSubmit = async () => {
   const params = JSON.parse(JSON.stringify(data.formData));
   await http.post("/s3/update", params);
-  window.location.reload()
+  await closeFormDialog()
 };
 
 // 关闭弹窗
-const closeFormDialog = () => {
+const closeFormDialog = async () => {
   data.type = "";
   data.formDialogVisible = false;
   data.formData = {};
