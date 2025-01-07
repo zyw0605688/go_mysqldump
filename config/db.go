@@ -34,7 +34,7 @@ type S3Config struct {
 var GlobalDB *gorm.DB
 
 func InitDb() {
-	db, err := gorm.Open(sqlite.Open("./assets/sqlite.db"), &gorm.Config{
+	db, err := gorm.Open(sqlite.Open("./mysql_backup/sqlite.db"), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {

@@ -17,4 +17,5 @@ go_mysqldump_linux
 assets/WebUI
 www/node_modules
 www/dist
+mysql_backup
 
