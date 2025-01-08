@@ -14,10 +14,10 @@ import (
 )
 
 // 上传文件到S3
-func uploadFileToS3(fileUrl string, s3Item config.S3Item) error {
+func uploadFileToS3(fileUrl string, s3Item config.S3Config) error {
 	// 创建 AWS SDK 配置
 	s3Config := aws.NewConfig().
-		WithCredentials(credentials.NewStaticCredentials(s3Item.SecretId, s3Item.SecretKey, "")).
+		WithCredentials(credentials.NewStaticCredentials(s3Item.AccessKey, s3Item.SecretKey, "")).
 		WithEndpoint(s3Item.Endpoint).
 		WithRegion(s3Item.Region)
 

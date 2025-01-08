@@ -16,20 +16,24 @@ var MyExecFilePath string
 func StartAndReload() {
 	MyCron.Stop()
 	// 获取所有配置
-	conf, err := config.GetConfig()
-	if err != nil {
-		fmt.Println("读取配置报错", err)
-		return
+	var list []config.DBConfig
+	config.GlobalDB.Find(&list)
+	fmt.Println("1111")
+	// 循环开始任务
+	for i, item := range list {
+		if item.IsBackup {
+			// 定时备份数据
+			_, err := MyCron.AddFunc("29 16 * * *", func() {
+				fmt.Println("222")
+				Dump(MyExecFilePath, item, i)
+			})
+			if err != nil {
+				fmt.Println("添加定时任务失败", err)
+				return
+			}
+		}
 	}
-	fmt.Println("配置信息：", conf)
-	// 定时备份数据
-	_, err = MyCron.AddFunc(conf.Cron, func() {
-		Dump(MyExecFilePath, conf)
-	})
-	if err != nil {
-		fmt.Println("添加定时任务失败", err)
-		return
-	}
+
 	MyCron.Start()
 }
 

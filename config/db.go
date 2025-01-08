@@ -19,6 +19,7 @@ type DBConfig struct {
 	Dbs          datatypes.JSON `gorm:"column:dbs;type:json" json:"dbs"`
 	IsLocalStore bool           `gorm:"column:is_local_store;type:is_local_store" json:"is_local_store"`
 	S3s          datatypes.JSON `gorm:"column:s3s;type:json" json:"s3s"`
+	IsBackup     bool           `gorm:"column:is_backup;type:is_backup" json:"is_backup"`
 }
 
 type S3Config struct {

@@ -114,6 +114,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="启用备份" prop="is_backup">
+          <el-switch v-model="data.formData.is_backup"></el-switch>
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -136,7 +139,8 @@ const data = reactive({
   tableData: [] as any,
   formDialogVisible: false,
   formData: {
-    is_local_store: true
+    is_local_store: true,
+    is_backup: false,
   },
   type: ""
 });
