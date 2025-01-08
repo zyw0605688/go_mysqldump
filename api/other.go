@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"gitee.com/zyw0605688_admin/go_mysqldump/backup"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -32,6 +33,15 @@ func GetDbsByDsn(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"code": 0,
 		"data": tableList,
+		"msg":  "",
+	})
+}
+
+func Reload(c *gin.Context) {
+	backup.StartAndReload()
+	c.JSON(200, gin.H{
+		"code": 0,
+		"data": "",
 		"msg":  "",
 	})
 }

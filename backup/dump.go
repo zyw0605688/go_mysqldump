@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-func Dump(execFilePath *string, config *config.Config) {
+func Dump(execFilePath string, config *config.Config) {
 	var backupZipFilePath = time.Now().Format("20060102150405") + ".zip"
 	defer os.Remove(backupZipFilePath)
 	for i, item := range config.Db {
-		cmd := exec.Command(*execFilePath, "-h", item.Host, "-P", item.Port, "-u", item.Username, "-p"+item.Password, "--databases")
+		cmd := exec.Command(execFilePath, "-h", item.Host, "-P", item.Port, "-u", item.Username, "-p"+item.Password, "--databases")
 		cmd.Args = append(cmd.Args, item.Databases...)
 		fmt.Println("即将执行命令：", cmd.String())
 		// 创建一个缓冲区来捕获输出

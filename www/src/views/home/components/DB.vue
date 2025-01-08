@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-button @click="showAddDialog">新增数据库</el-button>
+    <el-button @click="reload">重载备份</el-button>
     <el-table
       ref="multipleTable"
       style="width: 100%; height: 760px; margin-top: 16px"
@@ -127,6 +128,7 @@
 import { reactive } from "_vue@3.5.13@vue";
 import http from "@/service/http";
 import { onMounted } from "vue";
+import {reload} from "@/service/api"
 
 const data = reactive({
   dbList: [],

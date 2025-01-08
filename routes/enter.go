@@ -21,5 +21,6 @@ func InitRouters(router *gin.Engine) {
 	other := router.Group("/other")
 	{
 		other.POST("/getDbsByDsn", api.GetDbsByDsn)
+		other.GET("/reload", api.Reload)
 	}
 }
