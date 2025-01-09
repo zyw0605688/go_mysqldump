@@ -14,10 +14,6 @@
     "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.7.4",
     "element-plus": "^2.7.3",
-    "lodash": "^4.17.21",
-    "mitt": "^3.0.1",
-    "pinia": "^2.1.7",
-    "uuid": "^10.0.0",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

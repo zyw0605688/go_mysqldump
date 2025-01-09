@@ -83,7 +83,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "_vue@3.5.13@vue";
+import { reactive } from "vue";
 import http from "@/service/http";
 
 const data = reactive({

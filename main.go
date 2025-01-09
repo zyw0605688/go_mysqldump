@@ -41,6 +41,13 @@ func main() {
 	r.Use(cors.Default())
 	// 静态资源
 	r.Static("/www", "./assets/WebUI")
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"code": 0,
+			"data": "服务已启动，web页面请访问/www",
+			"msg":  "",
+		})
+	})
 	routes.InitRouters(r)
 	err := r.Run(":3028")
 	if err != nil {
