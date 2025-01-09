@@ -6,6 +6,8 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"os"
+	"path"
 	"time"
 )
 
@@ -35,7 +37,9 @@ type S3Config struct {
 var GlobalDB *gorm.DB
 
 func InitDb() {
-	db, err := gorm.Open(sqlite.Open("./mysql_backup/sqlite.db"), &gorm.Config{
+	rootDir, err := os.Getwd()
+	dbFile := path.Join(rootDir, "./mysql_backup/sqlite.db")
+	db, err := gorm.Open(sqlite.Open(dbFile), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {

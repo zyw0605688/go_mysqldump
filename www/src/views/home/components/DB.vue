@@ -9,20 +9,47 @@
       :data="data.tableData"
     >
       <el-table-column type="index" label="No." width="55" align="center" />
-      <el-table-column prop="host" label="主机" width="130" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="port" label="端口" width="90" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="username" label="用户名" width="90" :show-overflow-tooltip="true"></el-table-column>
-      <el-table-column prop="is_local_store" label="本地存储" width="90" :show-overflow-tooltip="true">
+      <el-table-column
+        prop="host"
+        label="主机"
+        width="130"
+        :show-overflow-tooltip="true"
+      ></el-table-column>
+      <el-table-column
+        prop="port"
+        label="端口"
+        width="90"
+        :show-overflow-tooltip="true"
+      ></el-table-column>
+      <el-table-column
+        prop="username"
+        label="用户名"
+        width="90"
+        :show-overflow-tooltip="true"
+      ></el-table-column>
+      <el-table-column
+        prop="is_local_store"
+        label="本地存储"
+        width="90"
+        :show-overflow-tooltip="true"
+      >
         <template #default="scope">
-          {{ scope.row.is_local_store ? "是" : "否"}}
+          {{ scope.row.is_local_store ? "是" : "否" }}
         </template>
       </el-table-column>
       <el-table-column prop="dbs" label="数据库" :show-overflow-tooltip="true">
         <template #default="scope">
-          <el-tag v-for="(item,index) in scope.row.dbs" :key="index" style="margin: 2px">{{item}}</el-tag>
+          <el-tag v-for="(item, index) in scope.row.dbs" :key="index" style="margin: 2px">{{
+            item
+          }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="cron" label="定时任务" :show-overflow-tooltip="true" width="120"></el-table-column>
+      <el-table-column
+        prop="cron"
+        label="定时任务"
+        :show-overflow-tooltip="true"
+        width="120"
+      ></el-table-column>
       <el-table-column align="left" label="操作" width="140">
         <template #default="scope">
           <el-button
@@ -128,9 +155,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive,onMounted } from "vue";
-import http from "@/service/http";
-import {reload} from "@/service/api"
+import { reactive, onMounted } from "vue";
+// @ts-ignore
+import { dblist, reload, s3list, dbdelete, dbupdate, DbsByDsn } from "@/service/api";
 
 const data = reactive({
   dbList: [],
@@ -140,15 +167,22 @@ const data = reactive({
   formData: {
     is_local_store: true,
     is_backup: false,
+    host: "",
+    port: "",
+    username: "",
+    password: "",
+    dbs: [],
+    cron: "",
+    s3s: []
   },
   type: ""
 });
 const getTableData = async () => {
-  const res = await http.get("/db/list");
+  const res = await dblist();
   data.tableData = res.data;
 };
 const getS3Data = async () => {
-  const res = await http.get("/s3/list");
+  const res = await s3list();
   data.s3List = res.data;
 };
 onMounted(async () => {
@@ -156,34 +190,34 @@ onMounted(async () => {
   await getTableData();
 });
 
-const getDbsByDsn = async()=>{
+const getDbsByDsn = async () => {
   const { host, port, username, password } = data.formData;
   const dsn = `${username}:${password}@tcp(${host}:${port})/`;
-  const res = await http.post("/other/getDbsByDsn",{dsn});
-  data.dbList = res.data
-}
+  const res = await DbsByDsn({ dsn });
+  data.dbList = res.data;
+};
 
 const deleteAccount = async (item: any) => {
-  await http.delete(`/db/delete?ID=${item.ID}`);
+  await dbdelete(item.ID);
   await getTableData();
 };
 
 const showAddDialog = async () => {
   data.formDialogVisible = true;
   data.type = "添加";
-  await getS3Data()
+  await getS3Data();
 };
 // 打开更新弹窗
 const getDetailAndShowUpdateFormDialog = async (row) => {
   data.type = "编辑";
   data.formData = row;
   data.formDialogVisible = true;
-  await getDbsByDsn()
-  await getS3Data()
+  await getDbsByDsn();
+  await getS3Data();
 };
 const onSubmit = async () => {
   const params = JSON.parse(JSON.stringify(data.formData));
-  await http.post("/db/update", params);
+  await dbupdate(params);
   await getTableData();
   closeFormDialog();
 };
@@ -192,7 +226,17 @@ const onSubmit = async () => {
 const closeFormDialog = () => {
   data.type = "";
   data.formDialogVisible = false;
-  data.formData = {};
+  data.formData = {
+    is_local_store: true,
+    is_backup: false,
+    host: "",
+    port: "",
+    username: "",
+    password: "",
+    dbs: [],
+    cron: "",
+    s3s: []
+  };
   data.dbList = [];
 };
 </script>

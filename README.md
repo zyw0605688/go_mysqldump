@@ -1,9 +1,9 @@
 ### 使用方式
 1. 启动容器
-   docker run -itd --name go-mysqldump -v /data/mysql_backup:/mysql_backup -p 8080:3028 zyw0605688/go-mysqldump:latest
+   docker run -itd --name go-mysqldump -v /data/mysql_backup:/mysql_backup -p 8080:3028 --restart always zyw0605688/go-mysqldump:latest
 2. 打开页面，访问
    http://x.x.x.x:8080/www/
-8080是你暴露的端口号（可自行修改），3028是程序监听端口号
+   8080是你暴露的端口号（可自行修改），3028是程序监听端口号
 
 
 ### 可视化配置以下信息

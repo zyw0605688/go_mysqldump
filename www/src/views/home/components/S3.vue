@@ -84,7 +84,8 @@
 </template>
 <script setup lang="ts">
 import { reactive } from "vue";
-import http from "@/service/http";
+// @ts-ignore
+import { s3list, s3delete, s3update } from "@/service/api";
 
 const data = reactive({
   activeName: "1",
@@ -95,12 +96,12 @@ const data = reactive({
   type: ""
 });
 const getTableData = async () => {
-  const res = await http.get("/s3/list");
+  const res = await s3list();
   data.tableData = res.data;
 };
 getTableData();
 const deleteAccount = async (item: any) => {
-  await http.delete(`/s3/delete?ID=${item.ID}`);
+  await s3delete(item.ID);
   await getTableData();
 };
 
@@ -116,7 +117,8 @@ const getDetailAndShowUpdateFormDialog = async (row) => {
 };
 const onSubmit = async () => {
   const params = JSON.parse(JSON.stringify(data.formData));
-  await http.post("/s3/update", params);
+  await s3update(params);
+  await getTableData();
   await closeFormDialog()
 };
 
