@@ -12,7 +12,7 @@ import (
 )
 
 func Dump(execFilePath string, item config.DBConfig, i int) {
-	var backupZipFilePath = time.Now().Format("20060102150405") + ".zip"
+	var backupZipFilePath = "/mysql_backup/" + time.Now().Format("20060102150405") + ".zip"
 	defer os.Remove(backupZipFilePath)
 	var dbList []string
 	json.Unmarshal([]byte(item.Dbs.String()), &dbList)
@@ -33,7 +33,7 @@ func Dump(execFilePath string, item config.DBConfig, i int) {
 
 	// 将输出写入文件
 	now := time.Now().Format("20060102150405")
-	backupFilePath := item.Host + "_" + now + ".sql"
+	backupFilePath := "/mysql_backup/" + item.Host + "_" + now + ".sql"
 	err = fileutil.WriteBytesToFile(backupFilePath, out.Bytes())
 	if err != nil {
 		fmt.Println("写入文件失败", err)

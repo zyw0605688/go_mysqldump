@@ -1,7 +1,21 @@
+### 使用方式
+1. 启动容器
+   docker run -itd --name go-mysqldump -v /data/mysql_backup:/mysql_backup -p 8080:3028 zyw0605688/go-mysqldump:latest
+2. 打开页面，访问
+   http://x.x.x.x:8080/www/
+8080是你暴露的端口号（可自行修改），3028是程序监听端口号
 
-## 一个定时备份mysql的工具，上传s3
+
+### 可视化配置以下信息
+1. cron: 定时任务的cron表达式，五个字段。在线生成[https://cron.ciding.cc/](https://cron.ciding.cc/)
+2. db: 数据库配置，支持多个数据库。
+3. s3: 支持华为云obs, 阿里云oss,腾讯云cos,七牛云, 又拍云，百度云，minio,亚马逊s3等任意支持s3协议的云存储。
+
+
+### 一个定时备份mysql的工具，上传s3
 1. 内嵌官方mysqldump命令行工具
 2. 调用命令行工具，定时执行，上传到s3对象存储
+
 
 ### 使用到的模块
 1. mysqldump
@@ -9,61 +23,16 @@
 3. go cdk
 4. go embed
 
+
 ### 代码执行流程
-1. 读取配置文件config.json（同目录下得有这个文件）
-2. 根据配置文件，生成定时任务
+1. 读取数据库存储的配置信息
+2. 根据配置，生成定时任务
 3. 任务里调用mysqldump，远程备份数据库。基本命令如下
    ./mysqldump -h 172.16.66.99 -P 3306 -u root -proot --databases ZmosPublicDb2 ZmosPublicDb > 20241009160701.sql
 4. 将备份文件压缩上传到指定s3云存储,会存到bucketName/mysql_backup/20241009160701.zip 文件名是时间
 
-### 配置文件
-```
-{
-  "cron": "0 12,13 * * *",
-  "db": [
-    {
-      "host": "172.xx.xx.xx",
-      "port": "3306",
-      "username": "root",
-      "password": "root",
-      "databases": ["ZMOS_ZC21", "ZMOS_ZC212"]
-    },
-    {
-      "host": "124.xx.xx.xx",
-      "port": "4408",
-      "username": "root",
-      "password": "root",
-      "databases": ["ZMOS_ZE0704","ZMOS_ZE0705"]
-    }
-  ],
-  "s3": {
-    "secretId": "xxx",
-    "secretKey": "xxx",
-    "endpoint": "obs.cn-east-3.myhuaweicloud.com",
-    "bucketName": "xxx",
-    "region": "cn-east-3"
-  }
-}
-```
-1. cron: 定时任务的cron表达式，五个字段。在线生成[https://cron.ciding.cc/](https://cron.ciding.cc/)
-2. db: 数据库配置，支持多个数据库。每个配置域下，host、port、username、password、databases是必须的。大小写，格式需严格符合。
-3. s3: 支持华为云obs, 阿里云oss,腾讯云cos,七牛云, 又拍云，百度云，minio,亚马逊s3等任意支持s3协议的云存储。每个配置域下secretID、secretKey、endpoint、bucketName、region是必须的。暂不支持上传多个s3，大小写，格式需严格符合。去掉s3整个配置则不上传s3。
 
-### 使用流程
-1. 下载release下可执行程序go_mysqldump_linux，config.json文件，放到同一目录下
-2. 修改config.json配置文件
-3. 给程序执行权限，chmod +x go_mysqldump_linux
-3. 运行程序go_mysqldump_linux(会占用终端)，也可以使用nohup go_mysqldump_linux > go_mysqldump.log 2>&1 &
-4. 结束进程，使用ps aux | grep 'go_mysqldump_linux' 查看进程，再使用kill  pid结束进程。注意，请不要使用kill -9 pid结束进程，使用kill pid即可，让程序能捕获到退出信号，清理临时文件。
-
-### 二次开发，打包
+### 二次开发
 1. 主程序在main.go中，很简单的几个方法。可参考上面的代码执行流程
-2. 打包命令
-```
-go env -w GOOS=linux  GOARCH=amd64 CGO_ENABLED=0
-go build -o go_mysqldump_linux main.go
-
-go env -w GOOS=windows  GOARCH=amd64 CGO_ENABLED=0
-go build -o "go_mysqldump_windows.exe" main.go
-```
-3. 如有需要，可以下载mysql包，替换mysqldump工具，以更换版本。目前使用的8.4.2 LTS版
+2. 如有需要，可以下载mysql包，替换mysqldump工具，以更换版本。目前使用的8.4.2 LTS版
+3. 打包docker build -t zyw0605688/go-mysqldump:latest .

@@ -23,7 +23,7 @@ func StartAndReload() {
 	for i, item := range list {
 		if item.IsBackup {
 			// 定时备份数据
-			_, err := MyCron.AddFunc("29 16 * * *", func() {
+			_, err := MyCron.AddFunc(item.Cron, func() {
 				fmt.Println("222")
 				Dump(MyExecFilePath, item, i)
 			})
