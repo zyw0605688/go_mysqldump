@@ -3,8 +3,9 @@ FROM registry.cn-shanghai.aliyuncs.com/pingda/node:20.18.0 AS webbuilder
 WORKDIR /webbuilder
 # 将所有文件复制到当前目录
 COPY . .
-RUN cd /webbuilder/www \
-    npm install --registry=http://registry.npmmirror.com \
+RUN touch /webbuilder/www/package.json
+RUN cd /webbuilder/www && \
+    npm install --registry=http://registry.npmmirror.com && \
     npm run build
 
 

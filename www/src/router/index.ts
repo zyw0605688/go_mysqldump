@@ -1,4 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+// @ts-ignore
+import Login from "@/views/login/index.vue"
+// @ts-ignore
+import Home from "@/views/home/index.vue"
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -6,12 +10,12 @@ const router = createRouter({
     {
       path: "/login",
       name: "登录",
-      component: () => import("@/views/login/index.vue")
+      component: Login
     },
     {
       path: "/",
       name: "首页",
-      component: () => import("@/views/home/index.vue")
+      component: Home
     }
   ]
 });

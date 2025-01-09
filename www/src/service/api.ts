@@ -25,15 +25,15 @@ export const s3update = async (data) => {
   return http.post(`${getBaseUrl()}/s3/update`,data);
 };
 
-export const dblist = async () => {
+export const dbList = async () => {
   return http.get(`${getBaseUrl()}/db/list`);
 };
 
-export const dbdelete = async (id) => {
+export const dbDelete = async (id) => {
   return http.delete(`${getBaseUrl()}/db/delete?ID=${id}`);
 };
 
-export const dbupdate = async (data) => {
+export const dbUpdate = async (data) => {
   return http.post(`${getBaseUrl()}/db/update`,data);
 };
 

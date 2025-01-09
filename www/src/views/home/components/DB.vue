@@ -157,7 +157,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from "vue";
 // @ts-ignore
-import { dblist, reload, s3list, dbdelete, dbupdate, DbsByDsn } from "@/service/api";
+import { reload, s3list, DbsByDsn, dbList, dbUpdate, dbDelete } from "@/service/api";
 
 const data = reactive({
   dbList: [],
@@ -178,7 +178,7 @@ const data = reactive({
   type: ""
 });
 const getTableData = async () => {
-  const res = await dblist();
+  const res = await dbList();
   data.tableData = res.data;
 };
 const getS3Data = async () => {
@@ -198,7 +198,7 @@ const getDbsByDsn = async () => {
 };
 
 const deleteAccount = async (item: any) => {
-  await dbdelete(item.ID);
+  await dbDelete(item.ID);
   await getTableData();
 };
 
@@ -217,7 +217,7 @@ const getDetailAndShowUpdateFormDialog = async (row) => {
 };
 const onSubmit = async () => {
   const params = JSON.parse(JSON.stringify(data.formData));
-  await dbupdate(params);
+  await dbUpdate(params);
   await getTableData();
   closeFormDialog();
 };
