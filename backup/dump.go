@@ -51,10 +51,10 @@ func Dump(execFilePath string, item config.DBConfig, i int) {
 	var s3IdList []string
 	json.Unmarshal([]byte(item.S3s.String()), &s3IdList)
 	if len(s3IdList) > 0 {
-		var s3List []config.S3Config
-		config.GlobalDB.Where("id in ?", s3IdList).Find(&s3List)
-		for _, s := range s3List {
-			err := uploadFileToS3(backupZipFilePath, s)
+		for _, s := range s3IdList {
+			var s3item config.S3Config
+			config.GlobalDB.Where("id = ?", s).First(&s3item)
+			err := uploadFileToS3(backupZipFilePath, s3item)
 			if err != nil {
 				fmt.Println("上传文件到s3失败", err)
 				return

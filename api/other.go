@@ -27,7 +27,6 @@ func GetDbsByDsn(c *gin.Context) {
 		fmt.Println("数据库连接失败：", err)
 		return
 	}
-	fmt.Println("数据库连接成功!___________")
 	var tableList []string
 	db.Raw("show DATABASES;").Scan(&tableList)
 	c.JSON(200, gin.H{

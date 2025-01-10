@@ -18,13 +18,11 @@ func StartAndReload() {
 	// 获取所有配置
 	var list []config.DBConfig
 	config.GlobalDB.Find(&list)
-	fmt.Println("1111")
 	// 循环开始任务
 	for i, item := range list {
 		if item.IsBackup {
 			// 定时备份数据
 			_, err := MyCron.AddFunc(item.Cron, func() {
-				fmt.Println("222")
 				Dump(MyExecFilePath, item, i)
 			})
 			if err != nil {
@@ -33,7 +31,6 @@ func StartAndReload() {
 			}
 		}
 	}
-
 	MyCron.Start()
 }
 
