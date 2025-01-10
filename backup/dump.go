@@ -48,12 +48,12 @@ func Dump(execFilePath string, item config.DBConfig, i int) {
 		fmt.Println("备份文件写入压缩包失败", err)
 	}
 	// 上传文件到s3
-	var s3IdList []string
+	var s3IdList []uint
 	json.Unmarshal([]byte(item.S3s.String()), &s3IdList)
 	if len(s3IdList) > 0 {
 		for _, s := range s3IdList {
 			var s3item config.S3Config
-			config.GlobalDB.Where("id = ?", s).First(&s3item)
+			config.GlobalDB.Where("ID = ?", s).First(&s3item)
 			err := uploadFileToS3(backupZipFilePath, s3item)
 			if err != nil {
 				fmt.Println("上传文件到s3失败", err)
