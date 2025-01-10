@@ -1,7 +1,16 @@
 <template>
   <div>
     <el-button @click="showAddDialog">新增数据库</el-button>
-    <el-button @click="reload">重载备份</el-button>
+    <el-popover
+      placement="top-start"
+      :width="200"
+      trigger="hover"
+      content="若更新备份配置，请点击完成手动重载"
+    >
+      <template #reference>
+        <el-button @click="reload">重载备份</el-button>
+      </template>
+    </el-popover>
     <el-table
       ref="multipleTable"
       style="width: 100%; height: 760px; margin-top: 16px"
@@ -39,9 +48,9 @@
       </el-table-column>
       <el-table-column prop="dbs" label="数据库" :show-overflow-tooltip="true">
         <template #default="scope">
-          <el-tag v-for="(item, index) in scope.row.dbs" :key="index" style="margin: 2px">{{
-            item
-          }}</el-tag>
+          <el-tag v-for="(item, index) in scope.row.dbs" :key="index" style="margin: 2px"
+            >{{ item }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column

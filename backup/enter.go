@@ -19,11 +19,11 @@ func StartAndReload() {
 	var list []config.DBConfig
 	config.GlobalDB.Find(&list)
 	// 循环开始任务
-	for i, item := range list {
+	for _, item := range list {
 		if item.IsBackup {
 			// 定时备份数据
 			_, err := MyCron.AddFunc(item.Cron, func() {
-				Dump(MyExecFilePath, item, i)
+				Dump(MyExecFilePath, item)
 			})
 			if err != nil {
 				fmt.Println("添加定时任务失败", err)

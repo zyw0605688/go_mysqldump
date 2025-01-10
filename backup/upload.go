@@ -14,7 +14,7 @@ import (
 )
 
 // 上传文件到S3
-func uploadFileToS3(fileUrl string, s3Item config.S3Config) error {
+func uploadFileToS3(fileUrl string, fileKey string, s3Item config.S3Config) error {
 	// 创建 AWS SDK 配置
 	s3Config := aws.NewConfig().
 		WithCredentials(credentials.NewStaticCredentials(s3Item.AccessKey, s3Item.SecretKey, "")).
@@ -44,7 +44,7 @@ func uploadFileToS3(fileUrl string, s3Item config.S3Config) error {
 	}
 	fileContentStr := string(fileContent)
 	reader := strings.NewReader(fileContentStr)
-	w, err := bucket.NewWriter(context.Background(), "mysql_backup/"+fileUrl, nil)
+	w, err := bucket.NewWriter(context.Background(), fileUrl, nil)
 	if err != nil {
 		fmt.Println("创建文件写入流失败", err)
 		return err
