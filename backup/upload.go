@@ -7,14 +7,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/duke-git/lancet/v2/fileutil"
 	"gocloud.dev/blob/s3blob"
 	"io"
 	"os"
 	"strings"
+	"time"
 )
 
 // 上传文件到S3
-func uploadFileToS3(fileUrl string, fileKey string, s3Item config.S3Config) error {
+func uploadFileToS3(fileUrl string, s3Item config.S3Config) error {
 	// 创建 AWS SDK 配置
 	s3Config := aws.NewConfig().
 		WithCredentials(credentials.NewStaticCredentials(s3Item.AccessKey, s3Item.SecretKey, "")).
@@ -37,14 +39,21 @@ func uploadFileToS3(fileUrl string, fileKey string, s3Item config.S3Config) erro
 	defer bucket.Close()
 
 	// 读取文件，上传
-	fileContent, err := os.ReadFile(fileUrl)
+	tempZip := "./temp.zip"
+	defer os.Remove(tempZip)
+	err = fileutil.Zip(fileUrl, tempZip)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileContent, err := os.ReadFile(tempZip)
 	if err != nil {
 		fmt.Println("读取文件失败", err)
 		return err
 	}
 	fileContentStr := string(fileContent)
 	reader := strings.NewReader(fileContentStr)
-	w, err := bucket.NewWriter(context.Background(), fileUrl, nil)
+	fileKey := "mysql_backup/" + time.Now().Format("20060102150405") + ".zip"
+	w, err := bucket.NewWriter(context.Background(), fileKey, nil)
 	if err != nil {
 		fmt.Println("创建文件写入流失败", err)
 		return err

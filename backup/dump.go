@@ -46,8 +46,7 @@ func Dump(execFilePath string, item config.DBConfig) {
 		for _, s := range s3IdList {
 			var s3item config.S3Config
 			config.GlobalDB.Where("ID = ?", s).First(&s3item)
-			fileKey := "mysql_backup/" + item.Host + "_" + now + ".sql"
-			err := uploadFileToS3(backupFilePath, fileKey, s3item)
+			err := uploadFileToS3(backupFilePath, s3item)
 			if err != nil {
 				fmt.Println("上传文件到s3失败", err)
 				return
