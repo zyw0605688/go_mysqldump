@@ -8,7 +8,7 @@
       content="若更新备份配置，请点击完成手动重载"
     >
       <template #reference>
-        <el-button @click="reload">重载备份</el-button>
+        <el-button @click="Reload">重载备份</el-button>
       </template>
     </el-popover>
     <el-table
@@ -59,7 +59,7 @@
         :show-overflow-tooltip="true"
         width="120"
       ></el-table-column>
-      <el-table-column align="left" label="操作" width="140">
+      <el-table-column align="left" label="操作" width="180">
         <template #default="scope">
           <el-button
             type="primary"
@@ -70,6 +70,7 @@
             编辑
           </el-button>
           <el-button type="danger" link @click="deleteAccount(scope.row)">删除</el-button>
+          <el-button link @click="GetBackupList(scope.row)">查看备份</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -166,7 +167,8 @@
 <script setup lang="ts">
 import { reactive, onMounted } from "vue";
 // @ts-ignore
-import { reload, s3list, DbsByDsn, dbList, dbUpdate, dbDelete } from "@/service/api";
+import { reload, s3list, DbsByDsn, dbList, dbUpdate, dbDelete, getBackupList } from "@/service/api";
+import { ElMessage } from "element-plus";
 
 const data = reactive({
   dbList: [],
@@ -248,6 +250,16 @@ const closeFormDialog = () => {
   };
   data.dbList = [];
 };
+
+const Reload = async () => {
+  await reload();
+  ElMessage.success("重新加载定时任务成功！");
+};
+
+const GetBackupList = async (val)=>{
+  const res = await getBackupList(val.ID)
+  console.log(res)
+}
 </script>
 
 <style scoped lang="scss"></style>

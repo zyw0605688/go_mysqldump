@@ -1,8 +1,10 @@
 package api
 
 import (
+	"fmt"
 	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 )
 
 func DBUpdate(c *gin.Context) {
@@ -34,6 +36,25 @@ func DBDelete(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"code": 0,
 		"data": "",
+		"msg":  "",
+	})
+}
+
+func DbBackupList(c *gin.Context) {
+	var list []string
+	dir, err := ioutil.ReadDir("./mysql_backup")
+	if err != nil {
+		fmt.Printf("读取目录出错: %v\n", err)
+		return
+	}
+	for _, entry := range dir {
+		if !entry.IsDir() {
+			list = append(list, entry.Name())
+		}
+	}
+	c.JSON(200, gin.H{
+		"code": 0,
+		"data": list,
 		"msg":  "",
 	})
 }

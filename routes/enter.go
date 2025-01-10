@@ -11,6 +11,7 @@ func InitRouters(router *gin.Engine) {
 		db.POST("/update", api.DBUpdate)
 		db.GET("/list", api.DBList)
 		db.DELETE("/delete", api.DBDelete)
+		db.GET("/backup/list", api.DbBackupList)
 	}
 	s3 := router.Group("/s3")
 	{

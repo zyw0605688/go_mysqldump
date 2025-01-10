@@ -2,6 +2,7 @@ package backup
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/aws/aws-sdk-go/aws"
@@ -10,6 +11,7 @@ import (
 	"github.com/duke-git/lancet/v2/fileutil"
 	"gocloud.dev/blob/s3blob"
 	"io"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -18,10 +20,13 @@ import (
 // 上传文件到S3
 func uploadFileToS3(fileUrl string, s3Item config.S3Config) error {
 	// 创建 AWS SDK 配置
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
 	s3Config := aws.NewConfig().
 		WithCredentials(credentials.NewStaticCredentials(s3Item.AccessKey, s3Item.SecretKey, "")).
 		WithEndpoint(s3Item.Endpoint).
-		WithRegion(s3Item.Region)
+		WithRegion(s3Item.Region).WithHTTPClient(&http.Client{Transport: tr})
 
 	// 创建 AWS 会话
 	sessions, err := session.NewSession(s3Config)

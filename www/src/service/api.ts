@@ -1,16 +1,16 @@
 import http from "./http";
 
-const getBaseUrl = ()=>{
+const getBaseUrl = () => {
   // @ts-ignore
-  return import.meta.env.MODE === "development" ? "http://127.0.0.1:3028" : window.location.origin
-}
+  return import.meta.env.MODE === "development" ? "http://127.0.0.1:3028" : window.location.origin;
+};
 
 export const reload = async () => {
-  return http.get( `${getBaseUrl()}/other/reload`);
+  return http.get(`${getBaseUrl()}/other/reload`);
 };
 
 export const DbsByDsn = async (data) => {
-  return http.post( `${getBaseUrl()}/other/getDbsByDsn`,data);
+  return http.post(`${getBaseUrl()}/other/getDbsByDsn`, data);
 };
 
 export const s3list = async () => {
@@ -22,7 +22,7 @@ export const s3delete = async (id) => {
 };
 
 export const s3update = async (data) => {
-  return http.post(`${getBaseUrl()}/s3/update`,data);
+  return http.post(`${getBaseUrl()}/s3/update`, data);
 };
 
 export const dbList = async () => {
@@ -34,6 +34,9 @@ export const dbDelete = async (id) => {
 };
 
 export const dbUpdate = async (data) => {
-  return http.post(`${getBaseUrl()}/db/update`,data);
+  return http.post(`${getBaseUrl()}/db/update`, data);
 };
 
+export const getBackupList = async (id) => {
+  return http.get(`${getBaseUrl()}/db/backup/list?ID=${id}`);
+};
