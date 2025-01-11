@@ -46,6 +46,7 @@
       :title="data.type"
       destroy-on-close
       style="width: 500px"
+      :before-close="closeFormDialog"
     >
       <el-form
         :model="data.formData"

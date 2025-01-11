@@ -78,6 +78,7 @@
       v-model="data.formDialogVisible"
       :title="data.type"
       destroy-on-close
+      :before-close="closeFormDialog"
       style="width: 500px"
     >
       <el-form
