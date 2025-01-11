@@ -5,6 +5,7 @@ import (
 	"gitee.com/zyw0605688_admin/go_mysqldump/config"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
+	"strings"
 )
 
 func DBUpdate(c *gin.Context) {
@@ -41,7 +42,9 @@ func DBDelete(c *gin.Context) {
 }
 
 func DbBackupList(c *gin.Context) {
-	var list []string
+	var item config.DBConfig
+	config.GlobalDB.Where("id = ?", c.Query("ID")).First(&item)
+	var list []map[string]string
 	dir, err := ioutil.ReadDir("./mysql_backup")
 	if err != nil {
 		fmt.Printf("读取目录出错: %v\n", err)
@@ -49,7 +52,13 @@ func DbBackupList(c *gin.Context) {
 	}
 	for _, entry := range dir {
 		if !entry.IsDir() {
-			list = append(list, entry.Name())
+			fileName := entry.Name()
+			if strings.Contains(fileName, item.Host) {
+				obj := map[string]string{
+					"file": fileName,
+				}
+				list = append(list, obj)
+			}
 		}
 	}
 	c.JSON(200, gin.H{

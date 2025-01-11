@@ -162,6 +162,21 @@
         </div>
       </template>
     </el-dialog>
+    <el-drawer
+      v-model="data.drawerVisible"
+      title="本地备份文件"
+      direction="rtl"
+      :before-close="beforeCloseDrawer"
+    >
+      <el-table :data="data.backUpFileList" stripe border>
+        <el-table-column type="index" label="No." width="60" align="center" />
+        <el-table-column
+          prop="file"
+          label="文件"
+          :show-overflow-tooltip="true"
+        ></el-table-column>
+      </el-table>
+    </el-drawer>
   </div>
 </template>
 <script setup lang="ts">
@@ -175,6 +190,7 @@ const data = reactive({
   s3List: [],
   tableData: [] as any,
   formDialogVisible: false,
+  drawerVisible: false,
   formData: {
     is_local_store: true,
     is_backup: false,
@@ -186,7 +202,8 @@ const data = reactive({
     cron: "",
     s3s: []
   },
-  type: ""
+  type: "",
+  backUpFileList: []
 });
 const getTableData = async () => {
   const res = await dbList();
@@ -256,10 +273,16 @@ const Reload = async () => {
   ElMessage.success("重新加载定时任务成功！");
 };
 
-const GetBackupList = async (val)=>{
-  const res = await getBackupList(val.ID)
-  console.log(res)
-}
+const GetBackupList = async (val) => {
+  const res = await getBackupList(val.ID);
+  data.drawerVisible = true;
+  data.backUpFileList = res.data;
+};
+const beforeCloseDrawer = () => {
+  data.drawerVisible = false;
+  data.backUpFileList = [];
+};
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>
