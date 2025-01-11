@@ -36,3 +36,7 @@
 1. 主程序在main.go中，很简单的几个方法。可参考上面的代码执行流程
 2. 如有需要，可以下载mysql包，替换mysqldump工具，以更换版本。目前使用的8.4.2 LTS版
 3. 打包docker build -t zyw0605688/go-mysqldump:latest .
+
+### 地址
+1. 代码仓库 https://gitee.com/zyw0605688_admin/go_mysqldump
+2. dockerhub地址 https://hub.docker.com/r/zyw0605688/go-mysqldump
