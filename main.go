@@ -12,10 +12,14 @@ import (
 	"github.com/robfig/cron/v3"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 //go:embed assets/mysqldump
 var mysqldumpLinux []byte
+
+//go:embed assets/mysqldump.exe
+var mysqldumpWindows []byte
 
 func main() {
 	// 加载数据库
@@ -64,12 +68,22 @@ func getExecFilePath() (resp string, err error) {
 		fmt.Println("创建临时目录失败", err)
 		return
 	}
-	execFilePath = filepath.Join(tempDir, "mysqldump")
-	err = fileutil.WriteBytesToFile(execFilePath, mysqldumpLinux)
-	if err != nil {
-		fmt.Println("创建mysqldump文件失败", err)
-		return
+	if runtime.GOOS == "windows" {
+		execFilePath = filepath.Join(tempDir, "mysqldump.exe")
+		err = fileutil.WriteBytesToFile(execFilePath, mysqldumpWindows)
+		if err != nil {
+			fmt.Println("创建mysqldump文件失败", err)
+			return
+		}
+	} else {
+		execFilePath = filepath.Join(tempDir, "mysqldump")
+		err = fileutil.WriteBytesToFile(execFilePath, mysqldumpLinux)
+		if err != nil {
+			fmt.Println("创建mysqldump文件失败", err)
+			return
+		}
 	}
+
 	// 设置可执行权限
 	err = os.Chmod(execFilePath, 0755)
 	if err != nil {

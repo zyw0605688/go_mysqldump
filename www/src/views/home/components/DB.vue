@@ -69,7 +69,11 @@
           >
             编辑
           </el-button>
-          <el-button type="danger" link @click="deleteAccount(scope.row)">删除</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="deleteAccount(scope.row)">
+            <template #reference>
+              <el-button type="danger" link>删除</el-button>
+            </template>
+          </el-popconfirm>
           <el-button link @click="GetBackupList(scope.row)">查看备份</el-button>
         </template>
       </el-table-column>
@@ -171,11 +175,7 @@
     >
       <el-table :data="data.backUpFileList" stripe border>
         <el-table-column type="index" label="No." width="60" align="center" />
-        <el-table-column
-          prop="file"
-          label="文件"
-          :show-overflow-tooltip="true"
-        ></el-table-column>
+        <el-table-column prop="file" label="文件" :show-overflow-tooltip="true"></el-table-column>
       </el-table>
     </el-drawer>
   </div>
@@ -285,5 +285,4 @@ const beforeCloseDrawer = () => {
 };
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

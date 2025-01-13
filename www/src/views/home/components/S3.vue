@@ -37,7 +37,11 @@
           >
             编辑
           </el-button>
-          <el-button type="danger" link @click="deleteAccount(scope.row)">删除</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="deleteAccount(scope.row)">
+            <template #reference>
+              <el-button type="danger" link>删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
