@@ -53,13 +53,12 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="cron"
-        :show-overflow-tooltip="true"
-        width="120"
-      >
+      <el-table-column prop="cron" :show-overflow-tooltip="true" width="120">
         <template #header>
-          定时任务<el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary"><Position style="width: 1em;margin-left: 4px"/></el-link>
+          定时任务
+          <el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary">
+            <Position style="width: 1em; margin-left: 4px" />
+          </el-link>
         </template>
       </el-table-column>
       <el-table-column align="left" label="操作" width="180">
@@ -134,8 +133,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item style="padding: 0;margin: 0;color: gray">
-          <div>表达式只支持5位,* * * * * 分、时、天、月、周，<el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary">参考</el-link></div>
+        <el-form-item style="padding: 0; margin: 0; color: gray">
+          <div>
+            表达式只支持5位,* * * * * 分、时、天、月、周，
+            <el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary"
+              >参考
+            </el-link>
+          </div>
         </el-form-item>
         <el-form-item label="定时任务" prop="cron">
           <el-input
@@ -175,23 +179,41 @@
     </el-dialog>
     <el-drawer
       v-model="data.drawerVisible"
-      title="本地备份文件"
+      title="备份文件"
       direction="rtl"
       :before-close="beforeCloseDrawer"
     >
-      <el-table :data="data.backUpFileList" stripe border>
-        <el-table-column type="index" label="No." width="60" align="center" />
-        <el-table-column prop="file" label="文件" :show-overflow-tooltip="true"></el-table-column>
-      </el-table>
+      <el-tabs v-model="data.activeName" type="card">
+        <el-tab-pane label="本地备份文件" name="local">
+          <el-table :data="data.backUpLocalList" stripe border>
+            <el-table-column type="index" label="No." width="60" align="center" />
+            <el-table-column
+              prop="file"
+              label="文件"
+              :show-overflow-tooltip="true"
+            ></el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="s3备份文件" name="s3">
+          <el-table :data="data.backUpS3List" stripe border>
+            <el-table-column type="index" label="No." width="60" align="center" />
+            <el-table-column
+              prop="file"
+              label="文件"
+              :show-overflow-tooltip="true"
+            ></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
     </el-drawer>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, nextTick } from "vue";
 // @ts-ignore
 import { reload, s3list, DbsByDsn, dbList, dbUpdate, dbDelete, getBackupList } from "@/service/api";
-import { ElMessage } from "element-plus";
-import {Position} from "@element-plus/icons-vue"
+import { Position } from "@element-plus/icons-vue";
+import { ElLoading, ElMessage } from "element-plus";
 
 const data = reactive({
   dbList: [],
@@ -211,7 +233,9 @@ const data = reactive({
     s3s: []
   },
   type: "",
-  backUpFileList: []
+  activeName: "local",
+  backUpLocalList: [],
+  backUpS3List: []
 });
 const getTableData = async () => {
   const res = await dbList();
@@ -282,13 +306,23 @@ const Reload = async () => {
 };
 
 const GetBackupList = async (val) => {
-  const res = await getBackupList(val.ID);
+  const loadingInstance = ElLoading.service({});
+  const res = (await getBackupList(val.ID)) as any;
+  res.data.localFileList.reverse().forEach((item:any) => {
+    data.backUpLocalList.push({ file: item });
+  });
+  res.data.s3FileList.reverse().forEach((item:any) => {
+    data.backUpS3List.push({ file: item });
+  });
   data.drawerVisible = true;
-  data.backUpFileList = res.data;
+  await nextTick(() => {
+    loadingInstance.close();
+  });
 };
 const beforeCloseDrawer = () => {
   data.drawerVisible = false;
-  data.backUpFileList = [];
+  data.backUpLocalList = [];
+  data.backUpS3List = [];
 };
 </script>
 
