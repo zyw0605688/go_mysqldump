@@ -55,10 +55,13 @@
       </el-table-column>
       <el-table-column
         prop="cron"
-        label="定时任务"
         :show-overflow-tooltip="true"
         width="120"
-      ></el-table-column>
+      >
+        <template #header>
+          定时任务<el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary"><Position style="width: 1em;margin-left: 4px"/></el-link>
+        </template>
+      </el-table-column>
       <el-table-column align="left" label="操作" width="180">
         <template #default="scope">
           <el-button
@@ -131,6 +134,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item style="padding: 0;margin: 0;color: gray">
+          <div>表达式只支持5位,* * * * * 分、时、天、月、周，<el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary">参考</el-link></div>
+        </el-form-item>
         <el-form-item label="定时任务" prop="cron">
           <el-input
             v-model="data.formData.cron"
@@ -185,6 +191,7 @@ import { reactive, onMounted } from "vue";
 // @ts-ignore
 import { reload, s3list, DbsByDsn, dbList, dbUpdate, dbDelete, getBackupList } from "@/service/api";
 import { ElMessage } from "element-plus";
+import {Position} from "@element-plus/icons-vue"
 
 const data = reactive({
   dbList: [],

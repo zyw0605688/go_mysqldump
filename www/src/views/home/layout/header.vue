@@ -14,6 +14,7 @@
             <li>支持备份到本机，也可以上传s3云存储，或两者共同使用。</li>
             <li>如果开启保存到本地，将映射/mysql_backup到宿主机。</li>
             <li>如需上传s3,请先添加s3配置。</li>
+            <li>表达式只支持5位,* * * * * 分、时、天、月、周，<el-link href="https://crontab.run/zh" target="_blank" :underline="false" type="primary">参考</el-link></li>
           </ul>
         </template>
       </el-popover>
