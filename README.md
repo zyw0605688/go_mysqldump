@@ -7,7 +7,7 @@
 
 
 ### 可视化配置以下信息
-1. cron: 定时任务的cron表达式，五个字段。在线生成[https://cron.ciding.cc/](https://cron.ciding.cc/)
+1. cron: 定时任务的cron表达式，五个字段。在线生成(https://crontab.run/zh)
 2. db: 数据库配置，支持多个数据库。
 3. s3: 支持华为云obs, 阿里云oss,腾讯云cos,七牛云, 又拍云，百度云，minio,亚马逊s3等任意支持s3协议的云存储。
 
