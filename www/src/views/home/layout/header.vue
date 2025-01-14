@@ -34,6 +34,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 const router = useRouter();
+import {InfoFilled,User} from "@element-plus/icons-vue"
 
 const logOut = () => {
   router.push("/login");
