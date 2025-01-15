@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/duke-git/lancet/v2/fileutil"
 	"gorm.io/datatypes"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -38,7 +39,9 @@ var GlobalDB *gorm.DB
 
 func InitDb() {
 	rootDir, err := os.Getwd()
-	dbFile := path.Join(rootDir, "./mysql_backup/sqlite.db")
+	dbFileDir := path.Join(rootDir, "./mysql_backup")
+	fileutil.CreateDir(dbFileDir)
+	dbFile := path.Join(dbFileDir, "/sqlite.db")
 	db, err := gorm.Open(sqlite.Open(dbFile), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})

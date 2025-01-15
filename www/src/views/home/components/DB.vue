@@ -308,12 +308,16 @@ const Reload = async () => {
 const GetBackupList = async (val) => {
   const loadingInstance = ElLoading.service({});
   const res = (await getBackupList(val.ID)) as any;
-  res.data.localFileList.reverse().forEach((item:any) => {
-    data.backUpLocalList.push({ file: item });
-  });
-  res.data.s3FileList.reverse().forEach((item:any) => {
-    data.backUpS3List.push({ file: item });
-  });
+  if (res.data.localFileList && res.data.localFileList.length) {
+    res.data.localFileList.reverse().forEach((item: any) => {
+      data.backUpLocalList.push({ file: item });
+    });
+  }
+  if (res.data.s3FileList && res.data.s3FileList.length) {
+    res.data.s3FileList.reverse().forEach((item: any) => {
+      data.backUpS3List.push({ file: item });
+    });
+  }
   data.drawerVisible = true;
   await nextTick(() => {
     loadingInstance.close();
