@@ -86,6 +86,7 @@
       destroy-on-close
       :before-close="closeFormDialog"
       style="width: 500px"
+      :close-on-click-modal="false"
     >
       <el-form
         :model="data.formData"
